@@ -1,0 +1,35 @@
+<!-- -->
+<!-- Convert the depth image and the rgb image into a xyzrgb Point Cloud -->
+<launch>
+
+    <!-- Nodelet manager for this pipeline -->
+    <node pkg="nodelet" type="nodelet" args="manager" name="standalone_nodelet" output="screen"/>
+
+
+    <!-- Convert to point cloud -->
+    <node pkg="nodelet" type="nodelet" name="depth_image_proc" args="load depth_image_proc/point_cloud_xyz standalone_nodelet --no-bond">
+        <!--remap from="rgb/camera_info" to="/carla/ego_vehicle/rgb_front/camera_info"/-->
+        <!--remap from="rgb/image_rect_color" to="/carla/ego_vehicle/rgb_front/image"/-->
+        <!--remap from="depth_registered/image_rect" to="/carla/ego_vehicle/depth_front/image"/-->
+
+        <!--remap from="depth_registered/points" to="/point_cloud/points"/-->
+
+        <remap from="image_rect" to="/depth"/>
+        <remap from="camera_info" to="/rgb_info"/>
+        <remap from="points" to="/hmpoints"/>
+    </node>
+
+  <!-- <node name="camera_info" pkg="rostopic" type="rostopic"
+    args="pub camera_info sensor_msgs/CameraInfo
+ '{header: {seq: 0, stamp: {secs: 0, nsecs: 0}, frame_id: ''},
+  height: 360, width: 640, distortion_model: 'plumb_bob',
+  D: [0],
+  K: [320.0, 0.0, 180, 0.0, 320.0, 320.0, 0.0, 0.0, 1.0],
+  R: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0],
+  P: [320.0, 0.0, 180, 0.0, 0.0, 320, 320, 0.0, 0.0, 0.0, 1.0, 0.0],
+  binning_x: 0, binning_y: 0,
+  roi: {x_offset: 0, y_offset: 0, height: 320, width: 640, do_rectify: false}}' -r 10" /> -->
+
+</launch>
+
+<!-- -->
