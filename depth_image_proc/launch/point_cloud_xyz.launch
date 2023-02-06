@@ -1,9 +1,17 @@
-<!-- -->
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- Convert the depth image and the rgb image into a xyzrgb Point Cloud -->
 <launch>
 
     <!-- Nodelet manager for this pipeline -->
     <node pkg="nodelet" type="nodelet" args="manager" name="standalone_nodelet" output="screen"/>
+
+		    <!-- Rectify Depth Image-->    
+    <node pkg="nodelet" type="nodelet" name="depth_img_rect"
+        args="load image_proc/rectify standalone_nodelet --no-bond">
+        <remap from="image_mono" to="/depth"/>
+        <remap from="camera_info" to="/rgb_info"/>
+        <remap from="image_rect" to="/depth_rectified"/>
+    </node>
 
 
     <!-- Convert to point cloud -->
@@ -14,7 +22,7 @@
 
         <!--remap from="depth_registered/points" to="/point_cloud/points"/-->
 
-        <remap from="image_rect" to="/depth"/>
+        <remap from="image_rect" to="/depth_rectified"/>
         <remap from="camera_info" to="/rgb_info"/>
         <remap from="points" to="/hmpoints"/>
     </node>
